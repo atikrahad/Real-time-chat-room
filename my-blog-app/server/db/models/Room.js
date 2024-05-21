@@ -1,4 +1,4 @@
-const db = require('../index');
+const db = require('../db');
 
 const getRooms = async () => {
   const res = await db.query('SELECT * FROM rooms');
