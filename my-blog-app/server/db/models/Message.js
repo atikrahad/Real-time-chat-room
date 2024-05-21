@@ -1,11 +1,16 @@
 const db = require("../db");
 
+
+// ========== get message database model ============
 const getMessagesByRoom = async (roomId) => {
   const res = await db.query("SELECT * FROM messages WHERE room_id = $1", [
     roomId,
   ]);
   return res.rows;
 };
+
+
+// =========== create message database model==============
 
 const createMessage = async (roomId, authorName, text) => {
   const res = await db.query(
