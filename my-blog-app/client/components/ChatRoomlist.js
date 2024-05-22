@@ -65,7 +65,7 @@ const ChatRoomlist = () => {
             key={data.id}
           >
             <TiGroup className="text-2xl" />
-            <Link href={`/chat/${data.id}/message`} className="py-2 px-3">
+            <Link href={`/chat/${data.id}`} className="py-2 px-3">
               {data.name}
             </Link>
           </div>
