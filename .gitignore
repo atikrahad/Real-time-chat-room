@@ -1,2 +1,4 @@
 /my-blog-app/server/node_modules
+/my-blog-app/client/node_modules
 /my-blog-app/server/.env
+.next
