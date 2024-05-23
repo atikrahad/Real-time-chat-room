@@ -1,4 +1,3 @@
-"use client";
 import { TiGroup } from "react-icons/ti";
 
 import { useEffect, useState } from "react";
@@ -9,12 +8,14 @@ const ChatRoomlist = () => {
   const [roomlist, setRoomlist] = useState([]);
   const [isLoad, setIsLoad] = useState(false);
 
+  //=========== fatching all chatroomlist data ===============
   useEffect(() => {
     fetch("http://localhost:5000/api/rooms")
       .then((res) => res.json())
-      .then((data) => setRoomlist(data?.data));
+      .then((data) => setRoomlist(data.data));
   }, [isLoad]);
 
+  //============ chatroom create function ==============
   const handleCreateChatRoom = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
@@ -42,6 +43,7 @@ const ChatRoomlist = () => {
           <IoMdChatboxes className="text-3xl" /> <h1>All chat room list</h1>
         </div>
 
+        {/* ======crete chat room form========== */}
         <form
           className="border px-5 py-3 text-2xl gap-4 font-bold w-full rounded-md  flex justify-between items-center bg-red-300"
           onSubmit={handleCreateChatRoom}
@@ -50,7 +52,6 @@ const ChatRoomlist = () => {
             className="bg-transparent w-36 md:w-full border text-xl font-normal outline-none px-2 rounded-md"
             placeholder="Create a new chat room"
             type="text"
-            defaultValue={name}
             name="name"
           ></input>
           <button className="border md:w-[50%] lg:w-[30%] rounded-full hover:bg-red-100 p-2 text-sm ">
@@ -58,6 +59,8 @@ const ChatRoomlist = () => {
           </button>
         </form>
       </div>
+
+      {/* ========Chat room list===========  */}
       <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 ">
         {roomlist.map((data) => (
           <div
