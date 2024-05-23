@@ -8,7 +8,7 @@ const Message = ({ data }) => {
           {data?.message_author_name}
         </h1>
         <p
-          title={`${data?.created_at.slice(0, 10)}, ${data?.created_at.slice(11, 19)}`}
+          
         >
           : {data?.message_text}
         </p>

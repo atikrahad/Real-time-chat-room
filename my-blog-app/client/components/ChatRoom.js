@@ -1,13 +1,34 @@
-import Link from "next/link";
+
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Message from "./Message";
 import { TiGroup } from "react-icons/ti";
 import { IoMdArrowBack } from "react-icons/io";
 
+import { io } from "socket.io-client";
+import { useChatcontext } from "@/contexts/ContextProvider";
+var socket;
+
 const ChatRoom = ({ id }) => {
   const [message, setMessage] = useState([]);
+  const [user, setUser] = useState({});
+  const { apiUrl } = useChatcontext();
+  
+  const [ isSocketioConnect, setIsSocketioConnect ] = useState(false);
+  
+  const name = user?.name;
+  const userid = user?.id;
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  useEffect(()=>{
+    const userData = JSON.parse(localStorage.getItem('userInfo'))
+    setUser(userData)
+  },[])
+
+  useEffect(() => {
+    socket = io(`${apiUrl}`);
+    socket.emit("setup", user);
+    socket.on("connection", () => setIsSocketioConnect(true));
+  }, [apiUrl, user]);
 
   //========== all message data fatching ==============
 
@@ -15,15 +36,23 @@ const ChatRoom = ({ id }) => {
     fetch(`${apiUrl}/api/rooms/${id}/messages`)
       .then((res) => res.json())
       .then((data) => setMessage(data.data));
-  }, [id]);
+    socket.emit("joinChat", id);
+    
+  }, [apiUrl, id]);
+
+  useEffect(() => {
+    socket.on("message receved", (newMessageReceved) => {
+      
+      return setMessage((prev) => [...prev, newMessageReceved.chat]);
+    });
+  },[]);
 
   //============ message sending function ============
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    const name = "Riad Hasan";
     const text = e.target.message.value;
-    const message = {
+    const messages = {
       name,
       text,
     };
@@ -34,16 +63,32 @@ const ChatRoom = ({ id }) => {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(message),
+      body: JSON.stringify(messages),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        if (data) {
+        if (data.data) {
+          const chat = data.data;
           e.target.reset();
+          socket.emit("new massage", { userId: userid, chat });
+          setMessage((prev) => [...prev, data.data]);
         }
       });
   };
+
+  const removeDuplicatesById = (array) => {
+    const seen = {};
+    return array.filter(item => {
+      if (seen[item.id]) {
+        return false;
+      }
+      seen[item.id] = true;
+      return true;
+    });
+  };
+  
+  const uniqueData = removeDuplicatesById(message);
+  console.log(uniqueData)
 
   return (
     <div>
@@ -57,8 +102,8 @@ const ChatRoom = ({ id }) => {
       {/* All message */}
       <div className="flex h-[85vh] w-full flex-col justify-between">
         <div className=" h-[90%] flex flex-col p-5 w-full overflow-y-scroll">
-          {message?.map((data) => (
-            <Message key={data.id} data={data} />
+          {uniqueData?.map((data, index) => (
+            <Message key={index} data={data} />
           ))}
         </div>
 

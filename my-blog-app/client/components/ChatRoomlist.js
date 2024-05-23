@@ -4,23 +4,25 @@ import { useEffect, useState } from "react";
 import { IoMdChatboxes } from "react-icons/io";
 import Link from "next/link";
 
+
 const ChatRoomlist = () => {
   const [roomlist, setRoomlist] = useState([]);
   const [isLoad, setIsLoad] = useState(false);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   //=========== fatching all chatroomlist data ===============
   useEffect(() => {
-    fetch("http://localhost:5000/api/rooms")
+    fetch(`${apiUrl}/api/rooms`)
       .then((res) => res.json())
       .then((data) => setRoomlist(data.data));
-  }, [isLoad]);
+  }, [apiUrl]);
 
   //============ chatroom create function ==============
   const handleCreateChatRoom = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
 
-    fetch("http://localhost:5000/api/rooms", {
+    fetch(`${apiUrl}/api/rooms`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
