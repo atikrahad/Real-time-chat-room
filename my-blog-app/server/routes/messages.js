@@ -29,6 +29,13 @@ router.post("/:id/messages", async (req, res) => {
   const { id } = req.params;
   const roomID = parseFloat(id);
   const { text, name } = req.body;
+  if (text === "") {
+    res.status(500).json({
+      successfull: false,
+      message: "something went wrong",
+      error: err,
+    });
+  }
 
   try {
     const message = await createMessage(roomID, name, text);

@@ -21,12 +21,17 @@ router.get("/", async (req, res) => {
   }
 });
 
-
 //=========== create a single room api route ==============
 
 router.post("/", async (req, res) => {
   const { name } = req.body;
-
+  if (name === "") {
+    res.status(500).json({
+      successfull: false,
+      message: "something went wrong",
+      error: err,
+    });
+  }
   try {
     const room = await createRoom(name);
     res.status(200).json({

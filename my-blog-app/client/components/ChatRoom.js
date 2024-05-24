@@ -25,7 +25,7 @@ const ChatRoom = ({ id }) => {
   },[])
 
   useEffect(() => {
-    socket = io(`${apiUrl}`);
+    socket = io('https://chat-server-psi-one.vercel.app');
     socket.emit("setup", user);
     socket.on("connection", () => setIsSocketioConnect(true));
   }, [apiUrl, user]);
@@ -45,7 +45,7 @@ const ChatRoom = ({ id }) => {
       
       return setMessage((prev) => [...prev, newMessageReceved.chat]);
     });
-  },[]);
+  });
 
   //============ message sending function ============
 
