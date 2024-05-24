@@ -30,7 +30,7 @@ To use the Chat Room Application, follow these steps:
 
 2. **Install Dependencies**: Navigate to the project directory and install dependencies.
     ```bash
-    cd chat-room-app
+    cd client
     npm install
     ```
 
