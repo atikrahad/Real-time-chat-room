@@ -9,7 +9,7 @@
 - [Usage](#usage)
 
 ## Introduction
-This project is a full-stack chat room application that allows users to communicate in real-time. It features user authentication, message storage, and a responsive UI.
+This project is a full-stack chat room application that allows users to communicate in real time. Message storage, and a responsive UI.
 
 ## Features
 - Real-time messaging
